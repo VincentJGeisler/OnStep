@@ -330,8 +330,10 @@ void setLatitude(double Lat) {
   // the polar home position
 #if MOUNT_TYPE == ALTAZM
   homePositionAxis2=AXIS2_HOME_DEFAULT;
+#elif MOUNT_TYPE == FORK
+  homePositionAxis2=AXIS2_HOME_DEFAULT;  // Fork mounts always home at -90° regardless of hemisphere
 #else
-  if (latitude < 0) homePositionAxis2=-AXIS2_HOME_DEFAULT; else homePositionAxis2=AXIS2_HOME_DEFAULT;
+  if (latitude < 0) homePositionAxis2=-AXIS2_HOME_DEFAULT; else homePositionAxis2=AXIS2_HOME_DEFAULT;  // GEM flips based on hemisphere
 #endif
 }
 

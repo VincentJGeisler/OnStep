@@ -213,7 +213,11 @@ void initWriteNvValues() {
     nv.write(EE_dpmW,round(AXIS1_LIMIT_MERIDIAN_W+128));
 
     // init the min and max altitude
-    minAlt=-10;
+#if MOUNT_TYPE == FORK
+    minAlt=-90;  // Fork mounts can point straight down to -90° declination
+#else
+    minAlt=-10;  // GEM and other mounts limited by horizon
+#endif
     maxAlt=80;
     nv.write(EE_minAlt,minAlt+128);
     nv.write(EE_maxAlt,maxAlt);

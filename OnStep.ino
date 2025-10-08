@@ -527,7 +527,13 @@ void loop2() {
 
     if (safetyLimitsOn) {
       // check altitude overhead limit and horizon limit
+#if MOUNT_TYPE != FORK
+      // GEM and AltAz mounts: enforce minAlt horizon limit
       if (currentAlt < minAlt) { generalError=ERR_ALT_MIN; stopSlewingAndTracking((MOUNT_TYPE == ALTAZM)?SS_LIMIT_AXIS2_MIN:SS_LIMIT); }
+#else
+      // Fork mounts: only enforce absolute limit of -90° (can go below horizon)
+      if (currentAlt < -90) { generalError=ERR_ALT_MIN; stopSlewingAndTracking(SS_LIMIT); }
+#endif
       if (currentAlt > maxAlt) { generalError=ERR_ALT_MAX; stopSlewingAndTracking((MOUNT_TYPE == ALTAZM)?SS_LIMIT_AXIS2_MAX:SS_LIMIT); }
     }
 

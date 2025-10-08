@@ -198,8 +198,10 @@ fixed_t fstepAxis1;                                          // tracking and PEC
 #ifndef AXIS2_HOME_DEFAULT
   #if MOUNT_TYPE == ALTAZM
     #define AXIS2_HOME_DEFAULT 0.0
+  #elif MOUNT_TYPE == FORK
+    #define AXIS2_HOME_DEFAULT -90.0                         // Fork mounts home at south celestial pole (straight down)
   #else
-    #define AXIS2_HOME_DEFAULT 90.0                          // always positive, sign is automatically adjusted for hemisphere
+    #define AXIS2_HOME_DEFAULT 90.0                          // GEM mounts home at north celestial pole (counterweights down)
   #endif
 #endif
 double homePositionAxis2                = AXIS2_HOME_DEFAULT;

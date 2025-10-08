@@ -233,11 +233,11 @@ CommandErrors unPark(bool withTrackingOn) {
     meridianFlip=MeridianFlipNever;
   #endif
 
-  if (withTrackingOn) {
-    // update our status, we're not parked anymore
-    parkStatus=NotParked;
-    nv.write(EE_parkStatus,parkStatus);
+  // update our status, we're not parked anymore (must happen regardless of tracking state)
+  parkStatus=NotParked;
+  nv.write(EE_parkStatus,parkStatus);
 
+  if (withTrackingOn) {
     // start tracking
     trackingState=TrackingSidereal;
     enableStepperDrivers();
@@ -248,6 +248,9 @@ CommandErrors unPark(bool withTrackingOn) {
     
     pecRecorded=nv.read(EE_pecRecorded); if (!pecRecorded) pecStatus=IgnorePEC;
     if (pecRecorded != true && pecRecorded != false) { pecRecorded=false; DLF("ERR, unPark(): bad NV pecRecorded"); }
+  } else {
+    // not starting tracking, but motors must still be enabled for manual movement
+    enableStepperDrivers();
   }
   VLF("MSG: Un-Parking done");
   return CE_NONE;
