@@ -103,6 +103,10 @@
 // PARKING BEHAVIOUR ------------------------------------------ see https://onstep.groups.io/g/main/wiki/Configuration-Mount#PARKING
 #define STRICT_PARKING                OFF //    OFF, ON Un-parking is only allowed if successfully parked.                    Option
 
+// DEFAULT PARK POSITIONS ------------------------------------- see https://onstep.groups.io/g/main/wiki/Configuration-Mount#PARKING
+#define PARK_AXIS1_DEFAULT             OFF //    OFF, n. Where n=-360..360 (degrees.) Default RA/HA park position.              Option
+#define PARK_AXIS2_DEFAULT             OFF //    OFF, n. Where n=-90..90 (degrees.) Default Dec park position.                 Option
+
 // MOTION CONTROL ---------------------------------------------- see https://onstep.groups.io/g/main/wiki/Configuration-Mount#MOTION
 #define STEP_WAVE_FORM             SQUARE // SQUARE, PULSE Step signal wave form faster rates. SQUARE best signal integrity.  Adjust
 

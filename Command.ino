@@ -1720,7 +1720,7 @@ void processCommands() {
 //                    1 on success
       if (command[1] == 'h')  {
         if (atoi2(parameter,&i)) {
-          if (i >= -30 && i <= 30) {
+          if (i >= -90 && i <= 30) {
             minAlt=i; nv.update(EE_minAlt,minAlt+128);
           } else commandError=CE_PARAM_RANGE;
         } else commandError=CE_PARAM_FORM;

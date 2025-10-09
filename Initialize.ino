@@ -236,6 +236,20 @@ void initWriteNvValues() {
     nv.write(EE_parkSaved,false);
     nv.write(EE_parkStatus,NotParked);
 
+    // init default park positions if configured
+#if PARK_AXIS1_DEFAULT != OFF
+    if (PARK_AXIS1_DEFAULT >= -360 && PARK_AXIS1_DEFAULT <= 360) {
+      nv.writeFloat(EE_posAxis1,(double)PARK_AXIS1_DEFAULT);
+      nv.write(EE_parkSaved,true);
+    }
+#endif
+#if PARK_AXIS2_DEFAULT != OFF
+    if (PARK_AXIS2_DEFAULT >= -90 && PARK_AXIS2_DEFAULT <= 90) {
+      nv.writeFloat(EE_posAxis2,(double)PARK_AXIS2_DEFAULT);
+      nv.write(EE_parkSaved,true);
+    }
+#endif
+
     // init the pulse-guide rate
     nv.write(EE_pulseGuideRate,GuideRate1x);
 
@@ -409,7 +423,7 @@ void initReadNvValues() {
   
   // get the min. and max altitude
   minAlt=nv.read(EE_minAlt)-128;
-  if (minAlt < -30 || minAlt > 30) { minAlt=-10.0; generalError=ERR_NV_INIT; DLF("ERR, initReadNvValues(): bad NV minAlt"); }
+  if (minAlt < -90 || minAlt > 30) { minAlt=-10.0; generalError=ERR_NV_INIT; DLF("ERR, initReadNvValues(): bad NV minAlt"); }
   maxAlt=nv.read(EE_maxAlt);
 #if MOUNT_TYPE == ALTAZM
   if (maxAlt > 87) maxAlt=87;
