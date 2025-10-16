@@ -1,6 +1,11 @@
 double getInstrAxis1() {
   cli(); long p1=posAxis1; sei();
   double p=(double)((long)p1+indexAxis1Steps)/axis1Settings.stepsPerMeasure;
+#if MOUNT_TYPE == FORK || MOUNT_TYPE == ALTAZM
+  // Fork and AltAz mounts: no pier side offset logic needed
+  return p;
+#else
+  // GEM mounts: add 180° offset when Dec axis goes past ±90°
   cli(); long p2=posAxis2; sei();
 
 #if AXIS2_TANGENT_ARM_CORRECTION == ON
@@ -10,6 +15,7 @@ double getInstrAxis1() {
   double q=(double)((long)p2+indexAxis2Steps)/axis2Settings.stepsPerMeasure;
   if ((q < -90.0) || (q > 90.0)) p=p+180.0-360.0;
   return p;
+#endif
 }
 
 double getInstrAxis2() {
@@ -20,12 +26,23 @@ double getInstrAxis2() {
 #endif
   
   double q=(double)((long)p2+indexAxis2Steps)/axis2Settings.stepsPerMeasure;
+#if MOUNT_TYPE == FORK || MOUNT_TYPE == ALTAZM
+  // Fork and AltAz mounts: return Dec/Alt coordinate directly
+  return q;
+#else
+  // GEM mounts: handle coordinate wrapping when past ±90°
   if ((q < -90.0) || (q > 90.0)) q=180.0-q; if (q > 180.0) q-=360.0; if (q < -180.0) q+=360.0;
   return q;
+#endif
 }
 
 int getInstrPierSide() {
   if (atHome) return PierSideNone;
+#if MOUNT_TYPE == FORK || MOUNT_TYPE == ALTAZM
+  // Fork and AltAz mounts: no pier side concept
+  return PierSideNone;
+#else
+  // GEM mounts: determine pier side based on Dec axis position
   cli(); long p2=posAxis2; sei();
 
 #if AXIS2_TANGENT_ARM_CORRECTION == ON
@@ -34,11 +51,17 @@ int getInstrPierSide() {
   
   double q=(double)((long)p2+indexAxis2Steps)/axis2Settings.stepsPerMeasure;
   if ((q < -90.0) || (q > 90.0)) return PierSideWest; else return PierSideEast;
+#endif
 }
 
 void setIndexAxis1(double axis1, int newPierSide) {
   // sky=pos+index, index=sky-pos
+#if MOUNT_TYPE == FORK || MOUNT_TYPE == ALTAZM
+  // Fork and AltAz mounts: no pier side offset needed
+#else
+  // GEM mounts: add 180° when switching to west pier side
   if (newPierSide == PierSideWest) axis1=axis1+180.0;
+#endif
   cli(); long p1=posAxis1; sei();
   indexAxis1=axis1-(double)p1/axis1Settings.stepsPerMeasure;
   indexAxis1Steps=(long)(indexAxis1*axis1Settings.stepsPerMeasure);

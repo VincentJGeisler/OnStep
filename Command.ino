@@ -745,9 +745,13 @@ void processCommands() {
 #endif
 
         // provide pier side info.
+#if MOUNT_TYPE == GEM
         if (getInstrPierSide() == PierSideNone) reply[i++]='o'; else                                         // pier side n[o]ne
         if (getInstrPierSide() == PierSideEast) reply[i++]='T'; else                                         // pier side eas[T]
         if (getInstrPierSide() == PierSideWest) reply[i++]='W';                                              // pier side [W]est
+#else
+        reply[i++]='o';                                                                                       // FORK/ALTAZM always pier side none
+#endif
 
         // provide pulse-guide rate
         reply[i++]='0'+getPulseGuideRate();

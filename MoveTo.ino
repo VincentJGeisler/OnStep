@@ -244,7 +244,13 @@ void moveTo() {
 
         // validate location
         byte parkPierSide=nv.read(EE_pierSide);
+#if MOUNT_TYPE == FORK || MOUNT_TYPE == ALTAZM
+        // Fork and AltAz mounts: pier side validation not applicable
+        if (pcbStatus != PCB_SUCCESS) { parkStatus=ParkFailed; nv.write(EE_parkStatus,parkStatus); }
+#else
+        // GEM mounts: validate pier side matches
         if (pierSideControl != parkPierSide || pcbStatus != PCB_SUCCESS) { parkStatus=ParkFailed; nv.write(EE_parkStatus,parkStatus); }
+#endif
 
         // sound park done
         soundAlert();

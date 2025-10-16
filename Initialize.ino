@@ -214,11 +214,14 @@ void initWriteNvValues() {
 
     // init the min and max altitude
 #if MOUNT_TYPE == FORK
-    minAlt=-90;  // Fork mounts can point straight down to -90° declination
+    // Fork mounts: use AXIS2 limits from Config.h (typically -90 to +90)
+    minAlt=AXIS2_LIMIT_MIN;
+    maxAlt=AXIS2_LIMIT_MAX;
 #else
-    minAlt=-10;  // GEM and other mounts limited by horizon
-#endif
+    // GEM and other mounts: use reasonable horizon limits
+    minAlt=-10;
     maxAlt=80;
+#endif
     nv.write(EE_minAlt,minAlt+128);
     nv.write(EE_maxAlt,maxAlt);
 

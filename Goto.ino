@@ -358,14 +358,24 @@ CommandErrors goTo(double thisTargetAxis1, double thisTargetAxis2, double altTar
     }
   } else {
     if (getInstrPierSide() == PierSideNone) {
-        // always on the "east" side of pier - we're in the western sky and the HA's are positive
-        // this is the default in the polar-home position and also for MOUNT_TYPE FORK and MOUNT_TYPE ALTAZM.
+#if MOUNT_TYPE == FORK || MOUNT_TYPE == ALTAZM
+        // Fork and AltAz mounts: no pier side concept, use PierSideNone
+        thisPierSide=PierSideNone;
+#else
+        // GEM mounts: always on the "east" side of pier - we're in the western sky and the HA's are positive
         thisPierSide=PierSideEast;
+#endif
     }
   }
   
   // final validation
+#if MOUNT_TYPE == FORK || MOUNT_TYPE == ALTAZM
+  // Fork and AltAz mounts: no pier side concept
+  int p=PierSideNone;
+#else
+  // GEM mounts: determine pier side for coordinate calculations
   int p=PierSideEast; switch (thisPierSide) { case PierSideWest: case PierSideFlipEW1: p=PierSideWest; break; }
+#endif
 #if MOUNT_TYPE == ALTAZM
   // allow +/- 360 in Az
   if (((thisTargetAxis1 > axis1Settings.max) || (thisTargetAxis1 < axis1Settings.min)) || ((thisTargetAxis2 > 180.0) || (thisTargetAxis2 < -180.0))) return CE_GOTO_ERR_UNSPECIFIED;
