@@ -152,13 +152,13 @@ CommandErrors startGuideAxis1(char direction, int guideRate, long guideDuration,
   if (direction == guideDirAxis1)         return CE_NONE;
   if (direction == 'e' && !guideEastOk()) return CE_SLEW_ERR_OUTSIDE_LIMITS;
   if (direction == 'w' && !guideWestOk()) return CE_SLEW_ERR_OUTSIDE_LIMITS;
-  if (guideRate < 3 && (generalError == ERR_ALT_MIN ||
+  if (guideRate < 3 && (/* generalError == ERR_ALT_MIN || */
                         generalError == ERR_LIMIT_SENSE ||
                         generalError == ERR_DEC ||
                         generalError == ERR_AZM ||
                         generalError == ERR_UNDER_POLE ||
                         generalError == ERR_MERIDIAN ||
-                        generalError == ERR_ALT_MAX)) return CE_SLEW_ERR_OUTSIDE_LIMITS;
+                        /* generalError == ERR_ALT_MAX */)) return CE_SLEW_ERR_OUTSIDE_LIMITS;
   
   if (guideRate < 3) deactivateBacklashComp(); else reactivateBacklashComp();
   enableGuideRate(guideRate);
@@ -189,13 +189,13 @@ CommandErrors startGuideAxis2(char direction, int guideRate, long guideDuration,
   if (direction == guideDirAxis2)          return CE_NONE;
   if (direction == 'n' && !guideNorthOk()) return CE_SLEW_ERR_OUTSIDE_LIMITS;
   if (direction == 's' && !guideSouthOk()) return CE_SLEW_ERR_OUTSIDE_LIMITS;
-  if (guideRate < 3 && (generalError == ERR_ALT_MIN ||
+  if (guideRate < 3 && (/* generalError == ERR_ALT_MIN || */
                         generalError == ERR_LIMIT_SENSE ||
                         generalError == ERR_DEC ||
                         generalError == ERR_AZM ||
                         generalError == ERR_UNDER_POLE ||
                         generalError == ERR_MERIDIAN ||
-                        generalError == ERR_ALT_MAX)) return CE_SLEW_ERR_OUTSIDE_LIMITS;
+                        /* generalError == ERR_ALT_MAX */)) return CE_SLEW_ERR_OUTSIDE_LIMITS;
 
   enableGuideRate(guideRate);
   if (guideRate < 3) deactivateBacklashComp(); else reactivateBacklashComp();
@@ -215,7 +215,8 @@ bool guideNorthOk() {
   double a2; if (AXIS2_TANGENT_ARM == ON) { cli(); a2=posAxis2/axis2Settings.stepsPerMeasure; sei(); } else a2=getInstrAxis2();
   if (a2 < axis2Settings.min && getInstrPierSide() == PierSideWest) return false;
   if (a2 > axis2Settings.max && getInstrPierSide() == PierSideEast) return false;
-  if (MOUNT_TYPE == ALTAZM && currentAlt > maxAlt) return false;
+  // Horizon limit checks disabled - allow guiding anywhere
+  // if (MOUNT_TYPE == ALTAZM && currentAlt > maxAlt) return false;
   return true;
 }
 bool guideSouthOk() {
@@ -223,7 +224,8 @@ bool guideSouthOk() {
   double a2; if (AXIS2_TANGENT_ARM == ON) { cli(); a2=posAxis2/axis2Settings.stepsPerMeasure; sei(); } else a2=getInstrAxis2();
   if (a2 < axis2Settings.min && getInstrPierSide() == PierSideEast) return false;
   if (a2 > axis2Settings.max && getInstrPierSide() == PierSideWest) return false;
-  if (MOUNT_TYPE == ALTAZM && currentAlt < minAlt) return false;
+  // Horizon limit checks disabled - allow guiding anywhere
+  // if (MOUNT_TYPE == ALTAZM && currentAlt < minAlt) return false;
   return true;
 }
 bool guideEastOk() {
@@ -260,13 +262,13 @@ CommandErrors startGuideSpiral(int guideRate, long guideDuration) {
   if (isSpiralGuiding())                   return CE_MOUNT_IN_MOTION;
   if (abs(getInstrAxis2() > 75.0))         return CE_SLEW_ERR_OUTSIDE_LIMITS;
   if (!guideNorthOk() || !guideSouthOk())  return CE_SLEW_ERR_OUTSIDE_LIMITS;
-  if ((generalError == ERR_ALT_MIN ||
+  if ((/* generalError == ERR_ALT_MIN || */
        generalError == ERR_LIMIT_SENSE ||
        generalError == ERR_DEC ||
        generalError == ERR_AZM ||
        generalError == ERR_UNDER_POLE ||
        generalError == ERR_MERIDIAN ||
-       generalError == ERR_ALT_MAX))       return CE_SLEW_ERR_OUTSIDE_LIMITS;
+       /* generalError == ERR_ALT_MAX */))       return CE_SLEW_ERR_OUTSIDE_LIMITS;
 
   spiralGuide = guideRate;
   if (spiralGuide < 3) spiralGuide=3;
