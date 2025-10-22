@@ -401,10 +401,19 @@ bool processConfigurationGet() {
   // Horizon limit
   v=server.arg("hl");
   if (v!="") {
+#if ASCOM_LIMITS_OVERRIDE == ON
+    // Allow full range when ASCOM override is enabled
+    if (v.toInt() >= -90 && v.toInt() <= 30) { 
+      sprintf(temp,":Sh%d#",(int16_t)v.toInt());
+      commandBool(temp);
+    }
+#else
+    // Standard ASCOM driver range
     if (v.toInt() >= -30 && v.toInt() <= 30) { 
       sprintf(temp,":Sh%d#",(int16_t)v.toInt());
       commandBool(temp);
     }
+#endif
   }
 
   // Meridian limit E

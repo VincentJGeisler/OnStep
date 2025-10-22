@@ -119,7 +119,11 @@ void SmartHandController::menuHorizon()
   if (DisplayMessageLX200(GetLX200(":Gh#", out)))
   {
     float angle = (float)strtol(&out[0], NULL, 10);
+#if ASCOM_LIMITS_OVERRIDE == ON
+    if (display->UserInterfaceInputValueFloat(&buttonPad, L_MOUNT_LIMIT_HORIZON, "", &angle, -90, 30, 2, 0, " degree"))
+#else
     if (display->UserInterfaceInputValueFloat(&buttonPad, L_MOUNT_LIMIT_HORIZON, "", &angle, -10, 20, 2, 0, " degree"))
+#endif
     {
       sprintf(out, ":Sh%+03d#", (int)angle);
       DisplayMessageLX200(SetLX200(out),false);

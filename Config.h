@@ -92,6 +92,10 @@
 #define SLEW_RAPID_STOP_DIST          2.5 //    2.0, n, (degrees.) Approx. distance required to stop when a slew              Adjust
                                           //         is aborted or a limit is exceeded.
 
+// ASCOM DRIVER OVERRIDE -------------------------------------- see https://onstep.groups.io/g/main/wiki/Configuration-Mount#ASCOM_OVERRIDE
+#define ASCOM_LIMITS_OVERRIDE         ON //    OFF, ON Forces ASCOM driver to use firmware limits instead of driver defaults.  Option
+                                          //         Prevents driver from overriding firmware altitude limits with -30° minimum.
+
 // PIER SIDE BEHAVIOUR -------------------------------------- see https://onstep.groups.io/g/main/wiki/Configuration---Mount#SYNCING
 #define MFLIP_SKIP_HOME               ON //    OFF, ON Goto directly to the destination without visiting home position.      Option
 #define MFLIP_PAUSE_HOME_MEMORY       OFF //    OFF, ON Remember meridian flip pause at home setting across power cycles.     Option
