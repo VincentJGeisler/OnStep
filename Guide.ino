@@ -156,7 +156,12 @@ CommandErrors startGuideAxis1(char direction, int guideRate, long guideDuration,
                         generalError == ERR_DEC ||
                         generalError == ERR_AZM ||
                         generalError == ERR_UNDER_POLE ||
-                        generalError == ERR_MERIDIAN)) return CE_SLEW_ERR_OUTSIDE_LIMITS;
+                        generalError == ERR_MERIDIAN
+#if DISABLE_HORIZON_LIMITS == OFF
+                        || generalError == ERR_ALT_MIN ||
+                        generalError == ERR_ALT_MAX
+#endif
+                        )) return CE_SLEW_ERR_OUTSIDE_LIMITS;
   
   if (guideRate < 3) deactivateBacklashComp(); else reactivateBacklashComp();
   enableGuideRate(guideRate);
@@ -191,7 +196,12 @@ CommandErrors startGuideAxis2(char direction, int guideRate, long guideDuration,
                         generalError == ERR_DEC ||
                         generalError == ERR_AZM ||
                         generalError == ERR_UNDER_POLE ||
-                        generalError == ERR_MERIDIAN)) return CE_SLEW_ERR_OUTSIDE_LIMITS;
+                        generalError == ERR_MERIDIAN
+#if DISABLE_HORIZON_LIMITS == OFF
+                        || generalError == ERR_ALT_MIN ||
+                        generalError == ERR_ALT_MAX
+#endif
+                        )) return CE_SLEW_ERR_OUTSIDE_LIMITS;
 
   enableGuideRate(guideRate);
   if (guideRate < 3) deactivateBacklashComp(); else reactivateBacklashComp();
@@ -211,8 +221,9 @@ bool guideNorthOk() {
   double a2; if (AXIS2_TANGENT_ARM == ON) { cli(); a2=posAxis2/axis2Settings.stepsPerMeasure; sei(); } else a2=getInstrAxis2();
   if (a2 < axis2Settings.min && getInstrPierSide() == PierSideWest) return false;
   if (a2 > axis2Settings.max && getInstrPierSide() == PierSideEast) return false;
-  // Horizon limit checks disabled - allow guiding anywhere
-  // if (MOUNT_TYPE == ALTAZM && currentAlt > maxAlt) return false;
+#if DISABLE_HORIZON_LIMITS == OFF
+  if (MOUNT_TYPE == ALTAZM && currentAlt > maxAlt) return false;
+#endif
   return true;
 }
 bool guideSouthOk() {
@@ -220,8 +231,9 @@ bool guideSouthOk() {
   double a2; if (AXIS2_TANGENT_ARM == ON) { cli(); a2=posAxis2/axis2Settings.stepsPerMeasure; sei(); } else a2=getInstrAxis2();
   if (a2 < axis2Settings.min && getInstrPierSide() == PierSideEast) return false;
   if (a2 > axis2Settings.max && getInstrPierSide() == PierSideWest) return false;
-  // Horizon limit checks disabled - allow guiding anywhere
-  // if (MOUNT_TYPE == ALTAZM && currentAlt < minAlt) return false;
+#if DISABLE_HORIZON_LIMITS == OFF
+  if (MOUNT_TYPE == ALTAZM && currentAlt < minAlt) return false;
+#endif
   return true;
 }
 bool guideEastOk() {
@@ -262,7 +274,12 @@ CommandErrors startGuideSpiral(int guideRate, long guideDuration) {
        generalError == ERR_DEC ||
        generalError == ERR_AZM ||
        generalError == ERR_UNDER_POLE ||
-       generalError == ERR_MERIDIAN))       return CE_SLEW_ERR_OUTSIDE_LIMITS;
+       generalError == ERR_MERIDIAN
+#if DISABLE_HORIZON_LIMITS == OFF
+       || generalError == ERR_ALT_MIN ||
+       generalError == ERR_ALT_MAX
+#endif
+       ))       return CE_SLEW_ERR_OUTSIDE_LIMITS;
 
   spiralGuide = guideRate;
   if (spiralGuide < 3) spiralGuide=3;

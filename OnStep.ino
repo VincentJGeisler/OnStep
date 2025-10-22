@@ -526,16 +526,17 @@ void loop2() {
     if (faultAxis1 || faultAxis2) { generalError=ERR_MOTOR_FAULT; stopSlewingAndTracking(SS_LIMIT_HARD); }
 
     if (safetyLimitsOn) {
-      // Horizon limit checks disabled - allow slewing anywhere
       // check altitude overhead limit and horizon limit
+#if DISABLE_HORIZON_LIMITS == OFF
 #if MOUNT_TYPE != FORK
       // GEM and AltAz mounts: enforce minAlt horizon limit
-      // if (currentAlt < minAlt) { generalError=ERR_ALT_MIN; stopSlewingAndTracking((MOUNT_TYPE == ALTAZM)?SS_LIMIT_AXIS2_MIN:SS_LIMIT); }
+      if (currentAlt < minAlt) { generalError=ERR_ALT_MIN; stopSlewingAndTracking((MOUNT_TYPE == ALTAZM)?SS_LIMIT_AXIS2_MIN:SS_LIMIT); }
 #else
       // Fork mounts: only enforce absolute limit of -90° (can go below horizon)
-      // if (currentAlt < -90) { generalError=ERR_ALT_MIN; stopSlewingAndTracking(SS_LIMIT); }
+      if (currentAlt < -90) { generalError=ERR_ALT_MIN; stopSlewingAndTracking(SS_LIMIT); }
 #endif
-      // if (currentAlt > maxAlt) { generalError=ERR_ALT_MAX; stopSlewingAndTracking((MOUNT_TYPE == ALTAZM)?SS_LIMIT_AXIS2_MAX:SS_LIMIT); }
+      if (currentAlt > maxAlt) { generalError=ERR_ALT_MAX; stopSlewingAndTracking((MOUNT_TYPE == ALTAZM)?SS_LIMIT_AXIS2_MAX:SS_LIMIT); }
+#endif
     }
 
     // OPTION TO POWER DOWN AXIS2 IF NOT MOVING

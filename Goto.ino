@@ -15,9 +15,10 @@ CommandErrors validateGoto() {
 
 CommandErrors validateGotoCoords(double HA, double Dec, double Alt) {
   // Check coordinates
-  // Horizon limit checks disabled - allow slewing anywhere
-  // if (Alt < minAlt)                            return CE_GOTO_ERR_BELOW_HORIZON;
-  // if (Alt > maxAlt)                            return CE_GOTO_ERR_ABOVE_OVERHEAD;
+#if DISABLE_HORIZON_LIMITS == OFF
+  if (Alt < minAlt)                            return CE_GOTO_ERR_BELOW_HORIZON;
+  if (Alt > maxAlt)                            return CE_GOTO_ERR_ABOVE_OVERHEAD;
+#endif
 #if AXIS2_TANGENT_ARM == OFF && MOUNT_TYPE != ALTAZM
     if (Dec < axis2Settings.min)               return CE_SLEW_ERR_OUTSIDE_LIMITS;
     if (Dec > axis2Settings.max)               return CE_SLEW_ERR_OUTSIDE_LIMITS;
