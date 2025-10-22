@@ -31,16 +31,16 @@ What the stepper motors actually do:
 
 ```mermaid
 graph TD
-    A[User Input:<br/>RA=12:30:00<br/>Dec=+45:00:00] --> B[Convert to Decimal]
-    B --> C[Apply Refraction<br/>Correction]
-    C --> D[Convert to Hour Angle]
-    D --> E[Apply Mount Corrections]
-    E --> F[Convert to Instrument<br/>Coordinates]
-    F --> G[Calculate Steps<br/>Required]
-    G --> H[Send to Motors]
-    H --> I[Read Encoder<br/>Position]
-    I --> J[Convert Back to<br/>Sky Coordinates]
-    J --> K[Report to User]
+    A[User Input RA=12:30:00 Dec=+45:00:00] --> B[Convert to Decimal];
+    B --> C[Apply Refraction Correction];
+    C --> D[Convert to Hour Angle];
+    D --> E[Apply Mount Corrections];
+    E --> F[Convert to Instrument Coordinates];
+    F --> G[Calculate Steps Required];
+    G --> H[Send to Motors];
+    H --> I[Read Encoder Position];
+    I --> J[Convert Back to Sky Coordinates];
+    J --> K[Report to User];
 ```
 
 ## Mount Type Differences
@@ -48,12 +48,12 @@ graph TD
 ### German Equatorial Mount (GEM)
 ```mermaid
 graph LR
-    A[RA/Dec Input] --> B[Convert to HA/Dec]
-    B --> C[Apply Pier Side Logic]
-    C --> D[Set Motor Targets]
-    D --> E[Physical Movement]
-    E --> F[Read Position]
-    F --> G[Convert Back to RA/Dec]
+    A[RA/Dec Input] --> B[Convert to HA/Dec];
+    B --> C[Apply Pier Side Logic];
+    C --> D[Set Motor Targets];
+    D --> E[Physical Movement];
+    E --> F[Read Position];
+    F --> G[Convert Back to RA/Dec];
 ```
 
 **Key Features:**
@@ -64,11 +64,11 @@ graph LR
 ### Fork Mount
 ```mermaid
 graph LR
-    A[RA/Dec Input] --> B[Direct Mapping]
-    B --> C[Set Motor Targets]
-    C --> D[Physical Movement]
-    D --> E[Read Position]
-    E --> F[Convert Back to RA/Dec]
+    A[RA/Dec Input] --> B[Direct Mapping];
+    B --> C[Set Motor Targets];
+    C --> D[Physical Movement];
+    D --> E[Read Position];
+    E --> F[Convert Back to RA/Dec];
 ```
 
 **Key Features:**
@@ -79,11 +79,11 @@ graph LR
 ### Altitude-Azimuth Mount
 ```mermaid
 graph LR
-    A[RA/Dec Input] --> B[Convert to Alt/Az]
-    B --> C[Set Motor Targets]
-    C --> D[Physical Movement]
-    D --> E[Read Position]
-    E --> F[Convert Back to RA/Dec]
+    A[RA/Dec Input] --> B[Convert to Alt/Az];
+    B --> C[Set Motor Targets];
+    C --> D[Physical Movement];
+    D --> E[Read Position];
+    E --> F[Convert Back to RA/Dec];
 ```
 
 **Key Features:**

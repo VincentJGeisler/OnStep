@@ -56,23 +56,23 @@ The main program follows this flow:
 
 ```mermaid
 graph TD
-    A[Power On] --> B[Hardware Initialization]
-    B --> C[Load Configuration from EEPROM]
-    C --> D[Initialize Stepper Drivers]
-    D --> E[Set Up Timers and Interrupts]
-    E --> F[Start Main Loop]
+    A[Power On] --> B[Hardware Initialization];
+    B --> C[Load Configuration from EEPROM];
+    C --> D[Initialize Stepper Drivers];
+    D --> E[Set Up Timers and Interrupts];
+    E --> F[Start Main Loop];
     
-    F --> G[Check Serial Commands]
-    G --> H[Process Motion Commands]
-    H --> I[Update Tracking]
-    I --> J[Check Safety Limits]
-    J --> K[Update Status LEDs]
-    K --> L[Handle Web Interface]
-    L --> M[Check for Errors]
-    M --> N{Error?}
-    N -->|Yes| O[Handle Error]
-    N -->|No| F
-    O --> F
+    F --> G[Check Serial Commands];
+    G --> H[Process Motion Commands];
+    H --> I[Update Tracking];
+    I --> J[Check Safety Limits];
+    J --> K[Update Status LEDs];
+    K --> L[Handle Web Interface];
+    L --> M[Check for Errors];
+    M --> N{Error?};
+    N -->|Yes| O[Handle Error];
+    N -->|No| F;
+    O --> F;
 ```
 
 ### Detailed Main Loop Breakdown
@@ -131,17 +131,17 @@ Controls all telescope movement:
 
 ```mermaid
 graph TD
-    A[Goto Command] --> B[Validate Coordinates]
-    B --> C{Valid?}
-    C -->|No| D[Return Error]
-    C -->|Yes| E[Calculate Target Position]
-    E --> F[Set Motor Targets]
-    F --> G[Start Movement]
-    G --> H[Monitor Progress]
-    H --> I{At Target?}
-    I -->|No| H
-    I -->|Yes| J[Stop Movement]
-    J --> K[Update Position]
+    A[Goto Command] --> B[Validate Coordinates];
+    B --> C{Valid?};
+    C -->|No| D[Return Error];
+    C -->|Yes| E[Calculate Target Position];
+    E --> F[Set Motor Targets];
+    F --> G[Start Movement];
+    G --> H[Monitor Progress];
+    H --> I{At Target?};
+    I -->|No| H;
+    I -->|Yes| J[Stop Movement];
+    J --> K[Update Position];
 ```
 
 ### 4. Command Processing (`Command.ino`)
@@ -170,29 +170,29 @@ if (command[0] == 'G') {
 
 ```mermaid
 graph LR
-    A[User Input] --> B[Command Parser]
-    B --> C[Coordinate Validation]
-    C --> D[Motion Controller]
-    D --> E[Stepper Drivers]
-    E --> F[Physical Movement]
-    F --> G[Position Feedback]
-    G --> H[Status Updates]
-    H --> I[User Interface]
+    A[User Input] --> B[Command Parser];
+    B --> C[Coordinate Validation];
+    C --> D[Motion Controller];
+    D --> E[Stepper Drivers];
+    E --> F[Physical Movement];
+    F --> G[Position Feedback];
+    G --> H[Status Updates];
+    H --> I[User Interface];
 ```
 
 ### Coordinate Transformation Flow
 
 ```mermaid
 graph TD
-    A[User Input: RA/Dec] --> B[Convert to Hour Angle]
-    B --> C[Apply Refraction]
-    C --> D[Convert to Instrument Coords]
-    D --> E[Apply Mount Corrections]
-    E --> F[Set Motor Targets]
-    F --> G[Physical Movement]
-    G --> H[Read Encoder Position]
-    H --> I[Convert Back to RA/Dec]
-    I --> J[Report to User]
+    A[User Input RA/Dec] --> B[Convert to Hour Angle];
+    B --> C[Apply Refraction];
+    C --> D[Convert to Instrument Coords];
+    D --> E[Apply Mount Corrections];
+    E --> F[Set Motor Targets];
+    F --> G[Physical Movement];
+    G --> H[Read Encoder Position];
+    H --> I[Convert Back to RA/Dec];
+    I --> J[Report to User];
 ```
 
 ## Configuration System
@@ -205,12 +205,12 @@ graph TD
 
 ```mermaid
 graph TD
-    A[Config.h Defaults] --> B[EEPROM Storage]
-    B --> C[Runtime Variables]
-    C --> D[Command Changes]
-    D --> E[Update EEPROM]
-    E --> B
-    C --> F[Hardware Control]
+    A[Config.h Defaults] --> B[EEPROM Storage];
+    B --> C[Runtime Variables];
+    C --> D[Command Changes];
+    D --> E[Update EEPROM];
+    E --> B;
+    C --> F[Hardware Control];
 ```
 
 ### Key Configuration Categories
@@ -236,19 +236,19 @@ Different mount types require different coordinate handling:
 
 ```mermaid
 graph TD
-    A[Mount Type Check] --> B{MOUNT_TYPE}
-    B -->|GEM| C[German Equatorial Logic]
-    B -->|FORK| D[Fork Mount Logic]
-    B -->|ALTAZM| E[Alt-Az Logic]
+    A[Mount Type Check] --> B{MOUNT_TYPE};
+    B -->|GEM| C[German Equatorial Logic];
+    B -->|FORK| D[Fork Mount Logic];
+    B -->|ALTAZM| E[Alt-Az Logic];
     
-    C --> F[Pier Side Handling]
-    C --> G[Meridian Flip Logic]
+    C --> F[Pier Side Handling];
+    C --> G[Meridian Flip Logic];
     
-    D --> H[No Pier Side]
-    D --> I[Simplified Coordinates]
+    D --> H[No Pier Side];
+    D --> I[Simplified Coordinates];
     
-    E --> J[Azimuth/Altitude]
-    E --> K[No Meridian Flip]
+    E --> J[Azimuth/Altitude];
+    E --> K[No Meridian Flip];
 ```
 
 ### Fork Mount Specific Logic
@@ -286,12 +286,12 @@ OnStep handles multiple coordinate systems:
 
 ```mermaid
 graph LR
-    A[Sky Coordinates<br/>RA/Dec] --> B[Coordinate<br/>Transformation]
-    B --> C[Instrument<br/>Coordinates]
-    C --> D[Step<br/>Calculation]
-    D --> E[Motor<br/>Movement]
-    E --> F[Position<br/>Feedback]
-    F --> B
+    A[Sky Coordinates RA/Dec] --> B[Coordinate Transformation];
+    B --> C[Instrument Coordinates];
+    C --> D[Step Calculation];
+    D --> E[Motor Movement];
+    E --> F[Position Feedback];
+    F --> B;
 ```
 
 ## Communication Protocols
