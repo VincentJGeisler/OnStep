@@ -535,8 +535,9 @@ void loop2() {
       // Fork mounts: only enforce absolute limit of -90° (can go below horizon)
       if (currentAlt < -90) { generalError=ERR_ALT_MIN; stopSlewingAndTracking(SS_LIMIT); }
 #endif
-      if (currentAlt > maxAlt) { generalError=ERR_ALT_MAX; stopSlewingAndTracking((MOUNT_TYPE == ALTAZM)?SS_LIMIT_AXIS2_MAX:SS_LIMIT); }
 #endif
+      // Always enforce overhead limit for camera safety
+      if (currentAlt > maxAlt) { generalError=ERR_ALT_MAX; stopSlewingAndTracking((MOUNT_TYPE == ALTAZM)?SS_LIMIT_AXIS2_MAX:SS_LIMIT); }
     }
 
     // OPTION TO POWER DOWN AXIS2 IF NOT MOVING

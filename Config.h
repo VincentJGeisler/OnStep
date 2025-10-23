@@ -96,10 +96,11 @@
 #define ASCOM_LIMITS_OVERRIDE         ON //    OFF, ON Forces ASCOM driver to use firmware limits instead of driver defaults.  Option
                                           //         Prevents driver from overriding firmware altitude limits with -30° minimum.
 
-// HORIZON LIMIT OVERRIDE -------------------------------------- FUCK YOU SLEW WHERE I FUCKING TELL YOU
-#define DISABLE_HORIZON_LIMITS        ON //    OFF, ON Completely disables ALL horizon limit checks - allows slewing anywhere.     Option
-                                          //         When ON: Mount will slew anywhere regardless of horizon limits or ASCOM driver.
+// HORIZON LIMIT OVERRIDE -------------------------------------- SLEW WHERE I DUCKING TELL YOU
+#define DISABLE_HORIZON_LIMITS        ON //    OFF, ON Disables ONLY horizon (minAlt) limit checks - overhead limits still work.    Option
+                                          //         When ON: Mount ignores horizon limits but keeps overhead safety limits.
                                           //         When OFF: Normal horizon limit safety checks are enforced.
+                                          //         NOTE: Overhead limits (maxAlt) are always enforced for camera safety.
 
 // PIER SIDE BEHAVIOUR -------------------------------------- see https://onstep.groups.io/g/main/wiki/Configuration---Mount#SYNCING
 #define MFLIP_SKIP_HOME               ON //    OFF, ON Goto directly to the destination without visiting home position.      Option

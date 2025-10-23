@@ -158,9 +158,9 @@ CommandErrors startGuideAxis1(char direction, int guideRate, long guideDuration,
                         generalError == ERR_UNDER_POLE ||
                         generalError == ERR_MERIDIAN
 #if DISABLE_HORIZON_LIMITS == OFF
-                        || generalError == ERR_ALT_MIN ||
-                        generalError == ERR_ALT_MAX
+                        || generalError == ERR_ALT_MIN
 #endif
+                        || generalError == ERR_ALT_MAX
                         )) return CE_SLEW_ERR_OUTSIDE_LIMITS;
   
   if (guideRate < 3) deactivateBacklashComp(); else reactivateBacklashComp();
@@ -198,9 +198,9 @@ CommandErrors startGuideAxis2(char direction, int guideRate, long guideDuration,
                         generalError == ERR_UNDER_POLE ||
                         generalError == ERR_MERIDIAN
 #if DISABLE_HORIZON_LIMITS == OFF
-                        || generalError == ERR_ALT_MIN ||
-                        generalError == ERR_ALT_MAX
+                        || generalError == ERR_ALT_MIN
 #endif
+                        || generalError == ERR_ALT_MAX
                         )) return CE_SLEW_ERR_OUTSIDE_LIMITS;
 
   enableGuideRate(guideRate);
@@ -276,9 +276,9 @@ CommandErrors startGuideSpiral(int guideRate, long guideDuration) {
        generalError == ERR_UNDER_POLE ||
        generalError == ERR_MERIDIAN
 #if DISABLE_HORIZON_LIMITS == OFF
-       || generalError == ERR_ALT_MIN ||
-       generalError == ERR_ALT_MAX
+       || generalError == ERR_ALT_MIN
 #endif
+       || generalError == ERR_ALT_MAX
        ))       return CE_SLEW_ERR_OUTSIDE_LIMITS;
 
   spiralGuide = guideRate;
