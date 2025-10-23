@@ -216,7 +216,7 @@ void initWriteNvValues() {
 #if MOUNT_TYPE == FORK
     // Fork mounts: use AXIS2 limits from Config.h (typically -90 to +90)
     minAlt=AXIS2_LIMIT_MIN;
-    maxAlt=AXIS2_LIMIT_MAX;
+    maxAlt=69; // Limit to +70° declination equivalent at 49° north latitude
 #else
     // GEM and other mounts: use reasonable horizon limits
     minAlt=-10;

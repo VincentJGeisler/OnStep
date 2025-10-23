@@ -168,7 +168,7 @@
 #define AXIS2_TANGENT_ARM             OFF //    OFF, ON +limit range below. Set cntr w/[Reset Home] Return cntr w/[Find Home] Infreq
 
 #define AXIS2_LIMIT_MIN               -90 //    -90, n. Where n=-90..0 (degrees.) Minimum allowed declination.                Infreq
-#define AXIS2_LIMIT_MAX                69 //     69, n. Where n=0..90 (degrees.) Maximum allowed altitude (equivalent to +70° Dec at 49° Lat). Infreq
+#define AXIS2_LIMIT_MAX                90 //     90, n. Where n=0..90 (degrees.) Maximum allowed declination.                 Infreq
 
 // AXIS3 ROTATOR
 // see https://onstep.groups.io/g/main/wiki/Configuration-Rotator-and-Focusers#AXIS3
