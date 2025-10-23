@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>architecture.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid@10.3.1/dist/mermaid.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="onstep-architecture-documentation">OnStep Architecture Documentation</h1>
+<h2 id="overview">Overview</h2>
+<p>OnStep is a telescope mount control system that runs on microcontrollers (Arduino, ESP32, etc.). This document explains the code structure, data flow, and key components to help developers understand and modify the system.</p>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#system-architecture">System Architecture</a></li>
+<li><a href="#main-program-flow">Main Program Flow</a></li>
+<li><a href="#key-components">Key Components</a></li>
+<li><a href="#data-flow-diagrams">Data Flow Diagrams</a></li>
+<li><a href="#configuration-system">Configuration System</a></li>
+<li><a href="#mount-type-handling">Mount Type Handling</a></li>
+<li><a href="#coordinate-systems">Coordinate Systems</a></li>
+<li><a href="#communication-protocols">Communication Protocols</a></li>
+<li><a href="#file-organization">File Organization</a></li>
+<li><a href="#common-modification-points">Common Modification Points</a></li>
+</ol>
+<h2 id="system-architecture">System Architecture</h2>
+<p>OnStep follows a modular architecture with these main layers:</p>
+<pre class="hljs"><code><div>┌─────────────────────────────────────────────────────────────┐
+│                    Application Layer                        │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐            │
+│  │   Goto      │ │   Park      │ │   Guide     │            │
+│  │   Control   │ │   Control   │ │   Control   │            │
+│  └─────────────┘ └─────────────┘ └─────────────┘            │
+└─────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                    Command Layer                            │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐            │
+│  │   Serial    │ │   Web       │ │   Hand      │            │
+│  │   Commands  │ │   Interface │ │   Controller│            │
+│  └─────────────┘ └─────────────┘ └─────────────┘            │
+└─────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                    Control Layer                            │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐            │
+│  │   Motion    │ │   Tracking  │ │   Safety    │            │
+│  │   Control   │ │   Control   │ │   Limits    │            │
+│  └─────────────┘ └─────────────┘ └─────────────┘            │
+└─────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                    Hardware Layer                           │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐            │
+│  │   Stepper   │ │   Sensors   │ │   EEPROM    │            │
+│  │   Drivers   │ │   (GPS,etc) │ │   Storage   │            │
+│  └─────────────┘ └─────────────┘ └─────────────┘            │
+└─────────────────────────────────────────────────────────────┘
+</div></code></pre>
+<h2 id="main-program-flow">Main Program Flow</h2>
+<p>The main program follows this flow:</p>
+<pre><code class="language-mermaid"><div class="mermaid">graph TD
+    A[Power On] --> B[Hardware Initialization];
+    B --> C[Load Configuration from EEPROM];
+    C --> D[Initialize Stepper Drivers];
+    D --> E[Set Up Timers and Interrupts];
+    E --> F[Start Main Loop];
+    
+    F --> G[Check Serial Commands];
+    G --> H[Process Motion Commands];
+    H --> I[Update Tracking];
+    I --> J[Check Safety Limits];
+    J --> K[Update Status LEDs];
+    K --> L[Handle Web Interface];
+    L --> M[Check for Errors];
+    M --> N{Error?};
+    N -->|Yes| O[Handle Error];
+    N -->|No| F;
+    O --> F;
+</div></code></pre>
+<h3 id="detailed-main-loop-breakdown">Detailed Main Loop Breakdown</h3>
+<ol>
+<li>
+<p><strong>Hardware Initialization</strong> (<code>OnStep.ino</code> - <code>setup()</code>)</p>
+<ul>
+<li>Initialize pins and hardware</li>
+<li>Load configuration from EEPROM</li>
+<li>Set up stepper drivers</li>
+<li>Initialize timers for tracking</li>
+</ul>
+</li>
+<li>
+<p><strong>Main Loop</strong> (<code>OnStep.ino</code> - <code>loop()</code>)</p>
+<ul>
+<li>Runs continuously at high frequency</li>
+<li>Handles all real-time operations</li>
+<li>Processes commands and updates tracking</li>
+</ul>
+</li>
+</ol>
+<h2 id="key-components">Key Components</h2>
+<h3 id="1-configuration-system-configh">1. Configuration System (<code>Config.h</code>)</h3>
+<p>The configuration system is the heart of OnStep customization:</p>
+<pre class="hljs"><code><div><span class="hljs-comment">// Mount type determines coordinate system behavior</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> MOUNT_TYPE                   FORK <span class="hljs-comment">// GEM, FORK, or ALTAZM</span></span>
+
+<span class="hljs-comment">// Stepper motor configuration</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> AXIS1_STEPS_PER_DEGREE    3200.0 <span class="hljs-comment">// RA axis steps per degree</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> AXIS2_STEPS_PER_DEGREE    1920.0 <span class="hljs-comment">// Dec axis steps per degree</span></span>
+
+<span class="hljs-comment">// Driver settings</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> AXIS1_DRIVER_MODEL            OFF <span class="hljs-comment">// Stepper driver type</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> AXIS1_DRIVER_MICROSTEPS       OFF <span class="hljs-comment">// Microstep setting</span></span>
+</div></code></pre>
+<p><strong>Why this matters</strong>: Every mount is different. These settings tell OnStep how your specific hardware works.</p>
+<h3 id="2-coordinate-system-srclibcoordh">2. Coordinate System (<code>src/lib/Coord.h</code>)</h3>
+<p>Handles all coordinate transformations between different coordinate systems:</p>
+<pre class="hljs"><code><div><span class="hljs-comment">// Get current instrument coordinates</span>
+<span class="hljs-function"><span class="hljs-keyword">double</span> <span class="hljs-title">getInstrAxis1</span><span class="hljs-params">()</span></span>; <span class="hljs-comment">// Returns RA/Azimuth position</span>
+<span class="hljs-function"><span class="hljs-keyword">double</span> <span class="hljs-title">getInstrAxis2</span><span class="hljs-params">()</span></span>; <span class="hljs-comment">// Returns Dec/Altitude position</span>
+
+<span class="hljs-comment">// Set target coordinates</span>
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">setIndexAxis1</span><span class="hljs-params">(<span class="hljs-keyword">double</span> axis1, <span class="hljs-keyword">int</span> newPierSide)</span></span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">setIndexAxis2</span><span class="hljs-params">(<span class="hljs-keyword">double</span> axis2, <span class="hljs-keyword">int</span> newPierSide)</span></span>;
+</div></code></pre>
+<p><strong>Key Concept</strong>: OnStep works in &quot;instrument coordinates&quot; (what the mount thinks) and converts to/from &quot;sky coordinates&quot; (what astronomers use).</p>
+<h3 id="3-motion-control-movetoino">3. Motion Control (<code>MoveTo.ino</code>)</h3>
+<p>Controls all telescope movement:</p>
+<pre><code class="language-mermaid"><div class="mermaid">graph TD
+    A[Goto Command] --> B[Validate Coordinates];
+    B --> C{Valid?};
+    C -->|No| D[Return Error];
+    C -->|Yes| E[Calculate Target Position];
+    E --> F[Set Motor Targets];
+    F --> G[Start Movement];
+    G --> H[Monitor Progress];
+    H --> I{At Target?};
+    I -->|No| H;
+    I -->|Yes| J[Stop Movement];
+    J --> K[Update Position];
+</div></code></pre>
+<h3 id="4-command-processing-commandino">4. Command Processing (<code>Command.ino</code>)</h3>
+<p>Handles all incoming commands from serial, web, or hand controller:</p>
+<pre class="hljs"><code><div><span class="hljs-comment">// Example command processing</span>
+<span class="hljs-keyword">if</span> (command[<span class="hljs-number">0</span>] == <span class="hljs-string">'G'</span>) {
+    <span class="hljs-comment">// Get commands (like :GR# for get RA)</span>
+    <span class="hljs-keyword">if</span> (command[<span class="hljs-number">1</span>] == <span class="hljs-string">'R'</span>) {
+        <span class="hljs-comment">// Return current RA</span>
+    }
+}
+</div></code></pre>
+<p><strong>Command Format</strong>: All commands follow LX200 protocol:</p>
+<ul>
+<li><code>:GR#</code> - Get current RA</li>
+<li><code>:GD#</code> - Get current Dec</li>
+<li><code>:MS#</code> - Move to target</li>
+<li><code>:ST1#</code> - Start tracking</li>
+</ul>
+<h2 id="data-flow-diagrams">Data Flow Diagrams</h2>
+<h3 id="complete-system-data-flow">Complete System Data Flow</h3>
+<pre><code class="language-mermaid"><div class="mermaid">graph LR
+    A[User Input] --> B[Command Parser];
+    B --> C[Coordinate Validation];
+    C --> D[Motion Controller];
+    D --> E[Stepper Drivers];
+    E --> F[Physical Movement];
+    F --> G[Position Feedback];
+    G --> H[Status Updates];
+    H --> I[User Interface];
+</div></code></pre>
+<h3 id="coordinate-transformation-flow">Coordinate Transformation Flow</h3>
+<pre><code class="language-mermaid"><div class="mermaid">graph TD
+    A[User Input RA/Dec] --> B[Convert to Hour Angle];
+    B --> C[Apply Refraction];
+    C --> D[Convert to Instrument Coords];
+    D --> E[Apply Mount Corrections];
+    E --> F[Set Motor Targets];
+    F --> G[Physical Movement];
+    G --> H[Read Encoder Position];
+    H --> I[Convert Back to RA/Dec];
+    I --> J[Report to User];
+</div></code></pre>
+<h2 id="configuration-system">Configuration System</h2>
+<h3 id="how-configuration-works">How Configuration Works</h3>
+<ol>
+<li><strong>Compile Time</strong>: <code>Config.h</code> defines default values</li>
+<li><strong>Runtime</strong>: Values can be changed via commands and stored in EEPROM</li>
+<li><strong>Persistence</strong>: Settings survive power cycles</li>
+</ol>
+<pre><code class="language-mermaid"><div class="mermaid">graph TD
+    A[Config.h Defaults] --> B[EEPROM Storage];
+    B --> C[Runtime Variables];
+    C --> D[Command Changes];
+    D --> E[Update EEPROM];
+    E --> B;
+    C --> F[Hardware Control];
+</div></code></pre>
+<h3 id="key-configuration-categories">Key Configuration Categories</h3>
+<ol>
+<li>
+<p><strong>Mount Type</strong> (<code>MOUNT_TYPE</code>)</p>
+<ul>
+<li><code>GEM</code> - German Equatorial Mount</li>
+<li><code>FORK</code> - Fork Mount</li>
+<li><code>ALTAZM</code> - Altitude-Azimuth Mount</li>
+</ul>
+</li>
+<li>
+<p><strong>Stepper Settings</strong></p>
+<ul>
+<li>Steps per degree</li>
+<li>Microstep settings</li>
+<li>Driver configuration</li>
+</ul>
+</li>
+<li>
+<p><strong>Safety Limits</strong></p>
+<ul>
+<li>Altitude limits</li>
+<li>Axis limits</li>
+<li>Meridian limits</li>
+</ul>
+</li>
+</ol>
+<h2 id="mount-type-handling">Mount Type Handling</h2>
+<p>Different mount types require different coordinate handling:</p>
+<pre><code class="language-mermaid"><div class="mermaid">graph TD
+    A[Mount Type Check] --> B{MOUNT_TYPE};
+    B -->|GEM| C[German Equatorial Logic];
+    B -->|FORK| D[Fork Mount Logic];
+    B -->|ALTAZM| E[Alt-Az Logic];
+    
+    C --> F[Pier Side Handling];
+    C --> G[Meridian Flip Logic];
+    
+    D --> H[No Pier Side];
+    D --> I[Simplified Coordinates];
+    
+    E --> J[Azimuth/Altitude];
+    E --> K[No Meridian Flip];
+</div></code></pre>
+<h3 id="fork-mount-specific-logic">Fork Mount Specific Logic</h3>
+<p>Fork mounts have simplified coordinate handling:</p>
+<pre class="hljs"><code><div><span class="hljs-meta">#<span class="hljs-meta-keyword">if</span> MOUNT_TYPE == FORK</span>
+    <span class="hljs-comment">// No pier side concept</span>
+    thisPierSide = PierSideNone;
+    <span class="hljs-comment">// Direct coordinate mapping</span>
+    Axis1 = targetRA;
+    Axis2 = targetDec;
+<span class="hljs-meta">#<span class="hljs-meta-keyword">else</span></span>
+    <span class="hljs-comment">// GEM mount logic with pier sides</span>
+    <span class="hljs-keyword">if</span> (newPierSide == PierSideWest) axis1 = axis1 + <span class="hljs-number">180.0</span>;
+<span class="hljs-meta">#<span class="hljs-meta-keyword">endif</span></span>
+</div></code></pre>
+<h2 id="coordinate-systems">Coordinate Systems</h2>
+<p>OnStep handles multiple coordinate systems:</p>
+<h3 id="1-sky-coordinates-what-astronomers-use">1. Sky Coordinates (What Astronomers Use)</h3>
+<ul>
+<li><strong>RA (Right Ascension)</strong>: 0-24 hours</li>
+<li><strong>Dec (Declination)</strong>: -90° to +90°</li>
+</ul>
+<h3 id="2-instrument-coordinates-what-the-mount-uses">2. Instrument Coordinates (What the Mount Uses)</h3>
+<ul>
+<li><strong>Axis1</strong>: RA or Azimuth position</li>
+<li><strong>Axis2</strong>: Dec or Altitude position</li>
+</ul>
+<h3 id="3-motor-coordinates-what-the-motors-see">3. Motor Coordinates (What the Motors See)</h3>
+<ul>
+<li><strong>Steps</strong>: Raw stepper motor steps</li>
+<li><strong>Microsteps</strong>: Sub-step positioning</li>
+</ul>
+<pre><code class="language-mermaid"><div class="mermaid">graph LR
+    A[Sky Coordinates RA/Dec] --> B[Coordinate Transformation];
+    B --> C[Instrument Coordinates];
+    C --> D[Step Calculation];
+    D --> E[Motor Movement];
+    E --> F[Position Feedback];
+    F --> B;
+</div></code></pre>
+<h2 id="communication-protocols">Communication Protocols</h2>
+<h3 id="serial-commands-lx200-protocol">Serial Commands (LX200 Protocol)</h3>
+<pre class="hljs"><code><div><span class="hljs-comment">// Get commands</span>
+:GR#     <span class="hljs-comment">// Get RA</span>
+:GD#     <span class="hljs-comment">// Get Dec</span>
+:GU#     <span class="hljs-comment">// Get status</span>
+
+<span class="hljs-comment">// Set commands  </span>
+:Sr12:<span class="hljs-number">30</span>:<span class="hljs-number">00</span>#  <span class="hljs-comment">// Set target RA</span>
+:Sd+<span class="hljs-number">45</span>:<span class="hljs-number">00</span>:<span class="hljs-number">00</span># <span class="hljs-comment">// Set target Dec</span>
+:MS#          <span class="hljs-comment">// Move to target</span>
+</div></code></pre>
+<h3 id="web-interface">Web Interface</h3>
+<ul>
+<li><strong>Configuration</strong>: <code>/configuration.htm</code></li>
+<li><strong>Status</strong>: Real-time updates via AJAX</li>
+<li><strong>Control</strong>: Web-based telescope control</li>
+</ul>
+<h3 id="hand-controller">Hand Controller</h3>
+<ul>
+<li><strong>Menu System</strong>: Hierarchical menu navigation</li>
+<li><strong>Real-time Control</strong>: Direct mount control</li>
+<li><strong>Status Display</strong>: Current position and status</li>
+</ul>
+<h2 id="file-organization">File Organization</h2>
+<h3 id="core-files">Core Files</h3>
+<pre class="hljs"><code><div>OnStep.ino              # Main program entry point
+Config.h                # Configuration settings
+Globals.h               # Global variables and structures
+Command.ino             # Command processing
+MoveTo.ino              # Motion control
+Goto.ino                # Goto functionality
+Park.ino                # Parking control
+</div></code></pre>
+<h3 id="library-files">Library Files</h3>
+<pre class="hljs"><code><div>src/lib/
+├── Coord.h             # Coordinate transformations
+├── Misc.h              # Utility functions
+└── Rotator.h           # Rotator control
+</div></code></pre>
+<h3 id="hardware-abstraction">Hardware Abstraction</h3>
+<pre class="hljs"><code><div>src/HAL/                # Hardware abstraction layer
+├── HAL.h               # Hardware definitions
+├── HAL_*.h             # Platform-specific code
+└── Pins_*.h            # Pin definitions
+</div></code></pre>
+<h3 id="add-ons">Add-ons</h3>
+<pre class="hljs"><code><div>addons/
+├── Ethernet/           # Ethernet interface
+├── WiFi/              # WiFi interface
+└── SmartHandController/ # Hand controller
+</div></code></pre>
+<h2 id="common-modification-points">Common Modification Points</h2>
+<h3 id="1-adding-new-commands">1. Adding New Commands</h3>
+<p><strong>File</strong>: <code>Command.ino</code>
+<strong>Location</strong>: Add new command handlers in the main command processing section</p>
+<pre class="hljs"><code><div><span class="hljs-comment">// Example: Add new command :GX#</span>
+<span class="hljs-keyword">if</span> (command[<span class="hljs-number">0</span>] == <span class="hljs-string">'G'</span> &amp;&amp; command[<span class="hljs-number">1</span>] == <span class="hljs-string">'X'</span>) {
+    <span class="hljs-comment">// Your new command logic here</span>
+    <span class="hljs-built_in">sprintf</span>(reply, <span class="hljs-string">"New command response"</span>);
+    boolReply = <span class="hljs-literal">false</span>;
+}
+</div></code></pre>
+<h3 id="2-modifying-coordinate-handling">2. Modifying Coordinate Handling</h3>
+<p><strong>File</strong>: <code>src/lib/Coord.h</code>
+<strong>Location</strong>: Functions like <code>getInstrAxis1()</code>, <code>setIndexAxis1()</code></p>
+<pre class="hljs"><code><div><span class="hljs-comment">// Example: Add custom coordinate transformation</span>
+<span class="hljs-function"><span class="hljs-keyword">double</span> <span class="hljs-title">getInstrAxis1</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-comment">// Your custom logic here</span>
+    <span class="hljs-keyword">return</span> calculatedPosition;
+}
+</div></code></pre>
+<h3 id="3-adding-new-mount-types">3. Adding New Mount Types</h3>
+<p><strong>File</strong>: <code>Config.h</code> and throughout codebase
+<strong>Location</strong>: Add new <code>#define MOUNT_TYPE</code> option</p>
+<pre class="hljs"><code><div><span class="hljs-comment">// In Config.h</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> MOUNT_TYPE YOUR_NEW_TYPE</span>
+
+<span class="hljs-comment">// In code files</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">if</span> MOUNT_TYPE == YOUR_NEW_TYPE</span>
+    <span class="hljs-comment">// Your mount-specific logic</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">endif</span></span>
+</div></code></pre>
+<h3 id="4-modifying-safety-limits">4. Modifying Safety Limits</h3>
+<p><strong>File</strong>: <code>OnStep.ino</code> (main loop safety checks)
+<strong>Location</strong>: Look for <code>safetyLimitsOn</code> checks</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">if</span> (safetyLimitsOn) {
+    <span class="hljs-comment">// Add your custom safety checks here</span>
+    <span class="hljs-keyword">if</span> (yourCustomCondition) {
+        stopSlewingAndTracking(SS_LIMIT);
+    }
+}
+</div></code></pre>
+<h3 id="5-adding-new-hardware-support">5. Adding New Hardware Support</h3>
+<p><strong>File</strong>: <code>src/HAL/HAL.h</code> and <code>src/pinmaps/</code>
+<strong>Location</strong>: Add new pin definitions and hardware support</p>
+<pre class="hljs"><code><div><span class="hljs-comment">// In HAL.h</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> YOUR_NEW_PIN 12</span>
+
+<span class="hljs-comment">// In Pins_YourBoard.h</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> YourNewPin 12</span>
+</div></code></pre>
+<h2 id="debugging-tips">Debugging Tips</h2>
+<h3 id="1-enable-debug-output">1. Enable Debug Output</h3>
+<pre class="hljs"><code><div><span class="hljs-comment">// In Config.h or relevant files</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> DEBUG_ONSTEP 1</span>
+
+<span class="hljs-comment">// Use debug macros</span>
+DF(<span class="hljs-string">"Debug message: %d\n"</span>, value);
+</div></code></pre>
+<h3 id="2-check-serial-output">2. Check Serial Output</h3>
+<ul>
+<li>Connect serial monitor to see debug messages</li>
+<li>Look for error messages and status updates</li>
+<li>Monitor command processing</li>
+</ul>
+<h3 id="3-common-issues">3. Common Issues</h3>
+<ol>
+<li><strong>Mount won't move</strong>: Check stepper driver configuration</li>
+<li><strong>Wrong coordinates</strong>: Verify steps per degree settings</li>
+<li><strong>Parking fails</strong>: Check pier side logic for your mount type</li>
+<li><strong>Tracking issues</strong>: Verify sidereal rate calculations</li>
+</ol>
+<h2 id="testing-your-changes">Testing Your Changes</h2>
+<h3 id="1-compile-test">1. Compile Test</h3>
+<pre class="hljs"><code><div><span class="hljs-comment"># Make sure your changes compile without errors</span>
+<span class="hljs-comment"># Check for warnings that might indicate issues</span>
+</div></code></pre>
+<h3 id="2-hardware-test">2. Hardware Test</h3>
+<ul>
+<li>Start with small movements</li>
+<li>Test parking/unparking</li>
+<li>Verify coordinate accuracy</li>
+<li>Check safety limits</li>
+</ul>
+<h3 id="3-integration-test">3. Integration Test</h3>
+<ul>
+<li>Test with ASCOM drivers</li>
+<li>Verify web interface</li>
+<li>Check hand controller functionality</li>
+</ul>
+<h2 id="conclusion">Conclusion</h2>
+<p>This architecture documentation provides a comprehensive guide to understanding and modifying OnStep. The key is to understand the coordinate system flow and how different mount types are handled. Always test changes thoroughly and consider the impact on different mount types.</p>
+<p>For specific modifications, refer to the relevant files mentioned in this document and use the debugging tips to troubleshoot any issues.</p>
+
+</body>
+</html>

@@ -216,11 +216,11 @@ void initWriteNvValues() {
 #if MOUNT_TYPE == FORK
     // Fork mounts: use AXIS2 limits from Config.h (typically -90 to +90)
     minAlt=AXIS2_LIMIT_MIN;
-    maxAlt=69; // Limit to +70° declination equivalent at 49° north latitude
+    maxAlt=90; // Maximum permissive overhead limit
 #else
     // GEM and other mounts: use reasonable horizon limits
     minAlt=-10;
-    maxAlt=80;
+    maxAlt=90; // Maximum permissive overhead limit
 #endif
     nv.write(EE_minAlt,minAlt+128);
     nv.write(EE_maxAlt,maxAlt);
@@ -431,7 +431,7 @@ void initReadNvValues() {
 #if MOUNT_TYPE == ALTAZM
   if (maxAlt > 87) maxAlt=87;
 #endif
-  if (maxAlt < 60 || maxAlt > 90) { maxAlt=80.0; generalError=ERR_NV_INIT; DLF("ERR, initReadNvValues(): bad NV maxAlt"); }
+  if (maxAlt < 60 || maxAlt > 90) { maxAlt=90.0; generalError=ERR_NV_INIT; DLF("ERR, initReadNvValues(): bad NV maxAlt"); }
 
   // get the backlash amounts
   backlashAxis1=nv.readInt(EE_backlashAxis1);

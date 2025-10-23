@@ -7,11 +7,9 @@ double getInstrAxis1() {
 #else
   // GEM mounts: add 180° offset when Dec axis goes past ±90°
   cli(); long p2=posAxis2; sei();
-
 #if AXIS2_TANGENT_ARM_CORRECTION == ON
   p2=atan(((double)p2/axis2Settings.stepsPerMeasure)/Rad)*Rad*axis2Settings.stepsPerMeasure;
 #endif
-  
   double q=(double)((long)p2+indexAxis2Steps)/axis2Settings.stepsPerMeasure;
   if ((q < -90.0) || (q > 90.0)) p=p+180.0-360.0;
   return p;
@@ -44,11 +42,9 @@ int getInstrPierSide() {
 #else
   // GEM mounts: determine pier side based on Dec axis position
   cli(); long p2=posAxis2; sei();
-
 #if AXIS2_TANGENT_ARM_CORRECTION == ON
   p2=atan(((double)p2/axis2Settings.stepsPerMeasure)/Rad)*Rad*axis2Settings.stepsPerMeasure;
 #endif
-  
   double q=(double)((long)p2+indexAxis2Steps)/axis2Settings.stepsPerMeasure;
   if ((q < -90.0) || (q > 90.0)) return PierSideWest; else return PierSideEast;
 #endif

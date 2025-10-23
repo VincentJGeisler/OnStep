@@ -15,16 +15,24 @@ CommandErrors validateGoto() {
 
 CommandErrors validateGotoCoords(double HA, double Dec, double Alt) {
   // Check coordinates
+#if DISABLE_ALL_LIMITS == OFF
 #if DISABLE_HORIZON_LIMITS == OFF
   if (Alt < minAlt)                            return CE_GOTO_ERR_BELOW_HORIZON;
 #endif
+#if DISABLE_OVERHEAD_LIMITS == OFF
   if (Alt > maxAlt)                            return CE_GOTO_ERR_ABOVE_OVERHEAD;
+#endif
+#if DISABLE_DEC_LIMITS == OFF
 #if AXIS2_TANGENT_ARM == OFF && MOUNT_TYPE != ALTAZM
     if (Dec < axis2Settings.min)               return CE_SLEW_ERR_OUTSIDE_LIMITS;
     if (Dec > axis2Settings.max)               return CE_SLEW_ERR_OUTSIDE_LIMITS;
 #endif
+#endif
+#if DISABLE_RA_LIMITS == OFF
   if (HA < axis1Settings.min)                  return CE_SLEW_ERR_OUTSIDE_LIMITS;
   if (HA > axis1Settings.max)                  return CE_SLEW_ERR_OUTSIDE_LIMITS;
+#endif
+#endif
   return CE_NONE;
 }
 

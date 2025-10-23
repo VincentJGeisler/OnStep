@@ -527,6 +527,7 @@ void loop2() {
 
     if (safetyLimitsOn) {
       // check altitude overhead limit and horizon limit
+#if DISABLE_ALL_LIMITS == OFF
 #if DISABLE_HORIZON_LIMITS == OFF
 #if MOUNT_TYPE != FORK
       // GEM and AltAz mounts: enforce minAlt horizon limit
@@ -536,8 +537,11 @@ void loop2() {
       if (currentAlt < -90) { generalError=ERR_ALT_MIN; stopSlewingAndTracking(SS_LIMIT); }
 #endif
 #endif
+#if DISABLE_OVERHEAD_LIMITS == OFF
       // Always enforce overhead limit for camera safety
       if (currentAlt > maxAlt) { generalError=ERR_ALT_MAX; stopSlewingAndTracking((MOUNT_TYPE == ALTAZM)?SS_LIMIT_AXIS2_MAX:SS_LIMIT); }
+#endif
+#endif
     }
 
     // OPTION TO POWER DOWN AXIS2 IF NOT MOVING
@@ -689,8 +693,10 @@ void loop2() {
     }
     double a2; if (AXIS2_TANGENT_ARM == ON) { cli(); a2=posAxis2/axis2Settings.stepsPerMeasure; sei(); } else a2=getInstrAxis2();
     // check for exceeding AXIS2_LIMIT_MIN or AXIS2_LIMIT_MAX
+#if DISABLE_DEC_LIMITS == OFF
     if (a2 < axis2Settings.min) { generalError=ERR_DEC; stopSlewingAndTracking(SS_LIMIT_AXIS2_MIN); } else
     if (a2 > axis2Settings.max) { generalError=ERR_DEC; stopSlewingAndTracking(SS_LIMIT_AXIS2_MAX); } else
+#endif
     // automatically clear error in TA mode
     if (AXIS2_TANGENT_ARM == ON && (trackingState == TrackingSidereal && generalError == ERR_DEC)) generalError=ERR_NONE;
 

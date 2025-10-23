@@ -219,8 +219,10 @@ CommandErrors startGuideAxis2(char direction, int guideRate, long guideDuration,
 bool guideNorthOk() {
   if (!safetyLimitsOn) return true;
   double a2; if (AXIS2_TANGENT_ARM == ON) { cli(); a2=posAxis2/axis2Settings.stepsPerMeasure; sei(); } else a2=getInstrAxis2();
+#if DISABLE_GUIDE_LIMITS == OFF
   if (a2 < axis2Settings.min && getInstrPierSide() == PierSideWest) return false;
   if (a2 > axis2Settings.max && getInstrPierSide() == PierSideEast) return false;
+#endif
 #if DISABLE_HORIZON_LIMITS == OFF
   if (MOUNT_TYPE == ALTAZM && currentAlt > maxAlt) return false;
 #endif
@@ -229,8 +231,10 @@ bool guideNorthOk() {
 bool guideSouthOk() {
   if (!safetyLimitsOn) return true;
   double a2; if (AXIS2_TANGENT_ARM == ON) { cli(); a2=posAxis2/axis2Settings.stepsPerMeasure; sei(); } else a2=getInstrAxis2();
+#if DISABLE_GUIDE_LIMITS == OFF
   if (a2 < axis2Settings.min && getInstrPierSide() == PierSideEast) return false;
   if (a2 > axis2Settings.max && getInstrPierSide() == PierSideWest) return false;
+#endif
 #if DISABLE_HORIZON_LIMITS == OFF
   if (MOUNT_TYPE == ALTAZM && currentAlt < minAlt) return false;
 #endif

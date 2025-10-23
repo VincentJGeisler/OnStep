@@ -102,6 +102,18 @@
                                           //         When OFF: Normal horizon limit safety checks are enforced.
                                           //         NOTE: Overhead limits (maxAlt) are always enforced for camera safety.
 
+// NUCLEAR OPTION - DISABLE ALL LIMITS ------------------------- Disable ALL LIMITS
+#define DISABLE_ALL_LIMITS            OFF //    OFF, ON Disables ALL limit checks - mount can slew anywhere without restrictions.    Option
+                                          //         When ON: Mount ignores ALL limits (horizon, overhead, axis, guide, etc.)
+                                          //         When OFF: Normal limit safety checks are enforced.
+                                          //         WARNING: This removes ALL safety protections!
+
+// INDIVIDUAL LIMIT OVERRIDES ----------------------------------- FOR TESTING
+#define DISABLE_OVERHEAD_LIMITS       OFF //    OFF, ON Disables overhead altitude limits (maxAlt)                            Option
+#define DISABLE_DEC_LIMITS           OFF //    OFF, ON Disables declination limits (axis2Settings.min/max)                   Option
+#define DISABLE_RA_LIMITS            OFF //    OFF, ON Disables RA limits (axis1Settings.min/max)                            Option
+#define DISABLE_GUIDE_LIMITS         OFF //    OFF, ON Disables guide axis limits                                             Option
+
 // PIER SIDE BEHAVIOUR -------------------------------------- see https://onstep.groups.io/g/main/wiki/Configuration---Mount#SYNCING
 #define MFLIP_SKIP_HOME               ON //    OFF, ON Goto directly to the destination without visiting home position.      Option
 #define MFLIP_PAUSE_HOME_MEMORY       OFF //    OFF, ON Remember meridian flip pause at home setting across power cycles.     Option
