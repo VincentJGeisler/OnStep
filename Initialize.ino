@@ -613,8 +613,40 @@ void initStartPosition() {
   posAxis2           = 0;
   blAxis2            = 0;
   sei();
-  setIndexAxis1(homePositionAxis1,PierSideEast);
-  setIndexAxis2(homePositionAxis2,PierSideEast);
+  
+  // Try to load position from RTC
+#if RTC_HOME_BUTTON == ON
+  float rtcAxis1, rtcAxis2;
+  uint8_t rtcParkStatus;
+  bool wasResetButton;
+  if (rtc.loadPosition(&rtcAxis1, &rtcAxis2, &rtcParkStatus, &wasResetButton)) {
+    VLF("MSG: Loaded position from RTC");
+    
+    if (wasResetButton) {
+      // Reset button was pressed - restore last known position
+      VLF("MSG: Reset button detected - restoring last known position");
+      setIndexAxis1(rtcAxis1, PierSideEast);
+      setIndexAxis2(rtcAxis2, PierSideEast);
+      parkStatus = rtcParkStatus;
+    } else {
+      // Normal power-up - go to parked position for safety
+      VLF("MSG: Normal power-up - going to parked position for safety");
+      setIndexAxis1(homePositionAxis1, PierSideEast);
+      setIndexAxis2(homePositionAxis2, PierSideEast);
+      parkStatus = 1; // Parked
+    }
+  } else {
+    // No valid position in RTC, assume parked
+    VLF("MSG: No valid position in RTC - assuming parked position");
+    setIndexAxis1(homePositionAxis1, PierSideEast);
+    setIndexAxis2(homePositionAxis2, PierSideEast);
+    parkStatus = 1; // Parked
+  }
+#else
+  // No RTC support - use default home position
+  setIndexAxis1(homePositionAxis1, PierSideEast);
+  setIndexAxis2(homePositionAxis2, PierSideEast);
+#endif
 }
 
 void initStartTimers() {

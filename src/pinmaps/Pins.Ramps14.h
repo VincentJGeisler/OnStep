@@ -73,6 +73,13 @@
 // The PPS pin is a 5V logic input, OnStep measures time between rising edges and adjusts the internal sidereal clock frequency
 #define PpsPin                2     // RAMPS X+, Interrupt 0 on Pin 2
 
+// I2C pins for DS3231 RTC (use RAMPS I2C connector)
+#define RTC_SDA_PIN          20     // RAMPS I2C connector SDA pin
+#define RTC_SCL_PIN          21     // RAMPS I2C connector SCL pin
+
+// Home/Reset button pin (use RAMPS X+ endstop connector)
+#define HOME_BUTTON_PIN       2     // RAMPS X+ endstop signal pin (with built-in pull-up)
+
 // Pins to Axis1 RA/Azm on RAMPS X
 #define Axis1_EN             38     // Enable
 #if PINMAP == MksGenL2 || PINMAP == MksGenL21
@@ -193,6 +200,11 @@
   #define ST4DEn             42     // ST4 DE+ North
   #define ST4RAe            A11     // ST4 RA+ East
 #endif
+
+// RTC and Home Button pins (when RTC_HOME_BUTTON == ON)
+#define RTC_SDA_PIN          20     // Arduino Mega2560 I2C SDA
+#define RTC_SCL_PIN          21     // Arduino Mega2560 I2C SCL
+#define HOME_BUTTON_PIN       2     // RAMPS X+ Pin 2 (with built-in pull-up)
 
 #else
 #error "Wrong processor for this configuration!"

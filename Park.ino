@@ -20,6 +20,11 @@ CommandErrors setPark() {
 
   // record our park status
   parkSaved=true; nv.write(EE_parkSaved,parkSaved);
+  
+  // Save position to RTC for power-off persistence (normal parking, not reset)
+#if RTC_HOME_BUTTON == ON
+  rtc.savePosition(getInstrAxis1(), getInstrAxis2(), 1, false); // 1 = Parked
+#endif
 
   // and remember what the index corrections are too (etc.)
   saveAlignModel();

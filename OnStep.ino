@@ -48,6 +48,42 @@
 
 #include "Constants.h"
 
+// RTC and Home Button support
+#if RTC_HOME_BUTTON == ON
+  #include "src/drivers/RTC_DS3231.h"
+  #include "src/drivers/HomeButton.h"
+  // Global instances
+  RTC_DS3231 rtc;
+  HomeButton homeButton;
+#else
+  // Forward declarations for when RTC_HOME_BUTTON is disabled
+  class RTC_DS3231 {
+  public:
+    bool init() { return false; }
+    bool savePosition(float, float, uint8_t, bool = false) { return false; }
+    bool loadPosition(float*, float*, uint8_t*, bool* = nullptr) { return false; }
+    bool clearPosition() { return false; }
+    bool isPositionValid() { return false; }
+  };
+  class HomeButton {
+  public:
+    HomeButton() {}
+    bool init() { return false; }
+    void update() {}
+    bool isPressed() { return false; }
+    bool wasPressed() { return false; }
+    void reset() {}
+  private:
+    bool buttonState;
+    bool lastButtonState;
+    unsigned long lastDebounceTime;
+    bool buttonPressed;
+  };
+  // Global instances
+  RTC_DS3231 rtc;
+  HomeButton homeButton;
+#endif
+
 // On first upload OnStep automatically initializes a host of settings in nv memory (EEPROM.)
 // This option forces that initialization again.
 // Change to ON, upload OnStep and nv will be reset to default. Wait about 30 seconds then set to OFF and upload again.
@@ -238,6 +274,21 @@ void setup() {
   VLF("MSG: Init TLS");
   if (!tls.init()) generalError=ERR_SITE_INIT;
   
+  // Initialize RTC and Home Button
+#if RTC_HOME_BUTTON == ON
+  VLF("MSG: Init RTC");
+  if (!rtc.init()) {
+    VLF("WARN: RTC not found, position storage disabled");
+  }
+  
+  VLF("MSG: Init Home Button");
+  if (!homeButton.init()) {
+    VLF("WARN: Home button initialization failed");
+  }
+#else
+  VLF("MSG: RTC and Home Button support disabled");
+#endif
+  
   // Check the Non-Volatile Memory
   VF("MSG: Start NV ");
   if (!nv.init()) {
@@ -427,6 +478,29 @@ void loop() {
 }
 
 void loop2() {
+  // HOME BUTTON HANDLING -----------------------------------------------------------------------------
+#if RTC_HOME_BUTTON == ON
+  homeButton.update();
+  if (homeButton.wasPressed()) {
+    VLF("MSG: Home button pressed - resetting position to parked");
+    
+    // Clear stored position from RTC
+    rtc.clearPosition();
+    
+    // Set mount to parked position
+    parkStatus = 1; // Parked
+    
+    // Set to parked coordinates (assuming fork mount parked position)
+    setIndexAxis1(0.0, PierSideEast);
+    setIndexAxis2(0.0, PierSideEast);
+    
+    // Save the parked position to RTC with reset flag
+    rtc.savePosition(0.0, 0.0, 1, true); // 1 = Parked
+    
+    VLF("MSG: Position reset to parked - ready for unpark");
+  }
+#endif
+  
   // GUIDING -------------------------------------------------------------------------------------------
   ST4();
   if ((trackingState != TrackingMoveTo) && (parkStatus == NotParked)) guide();
