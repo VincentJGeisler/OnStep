@@ -629,23 +629,45 @@ void initStartPosition() {
       setIndexAxis2(rtcAxis2, PierSideEast);
       parkStatus = rtcParkStatus;
     } else {
-      // Normal power-up - go to parked position for safety
-      VLF("MSG: Normal power-up - going to parked position for safety");
+      // Normal power-up - assume parked safely
+      VLF("MSG: Normal power-up - assuming parked position for safety");
+#if (MOUNT_TYPE == FORK) && (PARK_COORD_SYSTEM == INSTRUMENT)
+      // Compute instrument-space park: RA=LST, Dec=DEC_PARK_DEFAULT (with offsets)
+      double raParkDeg = (LST*15.0) + (double)PARK_AXIS1_OFFSET_DEG;
+      double decParkDeg = (double)DEC_PARK_DEFAULT + (double)PARK_AXIS2_OFFSET_DEG;
+      setIndexAxis1(raParkDeg, PierSideEast);
+      setIndexAxis2(decParkDeg, PierSideEast);
+#else
       setIndexAxis1(homePositionAxis1, PierSideEast);
       setIndexAxis2(homePositionAxis2, PierSideEast);
+#endif
       parkStatus = 1; // Parked
     }
   } else {
     // No valid position in RTC, assume parked
     VLF("MSG: No valid position in RTC - assuming parked position");
+  #if (MOUNT_TYPE == FORK) && (PARK_COORD_SYSTEM == INSTRUMENT)
+    double raParkDeg = (LST*15.0) + (double)PARK_AXIS1_OFFSET_DEG;
+    double decParkDeg = (double)DEC_PARK_DEFAULT + (double)PARK_AXIS2_OFFSET_DEG;
+    setIndexAxis1(raParkDeg, PierSideEast);
+    setIndexAxis2(decParkDeg, PierSideEast);
+  #else
     setIndexAxis1(homePositionAxis1, PierSideEast);
     setIndexAxis2(homePositionAxis2, PierSideEast);
+  #endif
     parkStatus = 1; // Parked
   }
 #else
   // No RTC support - use default home position
-  setIndexAxis1(homePositionAxis1, PierSideEast);
-  setIndexAxis2(homePositionAxis2, PierSideEast);
+  #if (MOUNT_TYPE == FORK) && (PARK_COORD_SYSTEM == INSTRUMENT)
+    double raParkDeg = (LST*15.0) + (double)PARK_AXIS1_OFFSET_DEG;
+    double decParkDeg = (double)DEC_PARK_DEFAULT + (double)PARK_AXIS2_OFFSET_DEG;
+    setIndexAxis1(raParkDeg, PierSideEast);
+    setIndexAxis2(decParkDeg, PierSideEast);
+  #else
+    setIndexAxis1(homePositionAxis1, PierSideEast);
+    setIndexAxis2(homePositionAxis2, PierSideEast);
+  #endif
 #endif
 }
 

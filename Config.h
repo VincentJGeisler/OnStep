@@ -129,6 +129,18 @@
 // PARKING BEHAVIOUR ------------------------------------------ see https://onstep.groups.io/g/main/wiki/Configuration-Mount#PARKING
 #define STRICT_PARKING                OFF //    OFF, ON Un-parking is only allowed if successfully parked.                    Option
 
+// PARK COORDINATE SYSTEM (FORK ON WEDGE RECOMMENDED) --------------------------------
+// INSTRUMENT: Park in instrument space (HA=0 → RA=LST, Dec near pole) for repeatability
+// AUTO: Use existing behavior for legacy compatibility
+#define PARK_COORD_SYSTEM         INSTRUMENT //  AUTO, INSTRUMENT. INSTRUMENT recommended for FORK on wedge.
+
+// Default park target for Dec in degrees (avoid -90 to prevent side flip)
+#define DEC_PARK_DEFAULT                -89 //    -90..90. Use -89 to keep sane pier side.
+
+// Optional small offsets to tweak park alignment (degrees)
+#define PARK_AXIS1_OFFSET_DEG             0 //     -2..2 typical. RA offset (deg) applied to LST*15.
+#define PARK_AXIS2_OFFSET_DEG             0 //     -2..2 typical. Dec offset (deg).
+
 // DEFAULT PARK POSITIONS ------------------------------------- see https://onstep.groups.io/g/main/wiki/Configuration-Mount#PARKING
 #define PARK_AXIS1_DEFAULT             180 //    OFF, n. Where n=-360..360 (degrees.) Default RA/HA park position.              Option
 #define PARK_AXIS2_DEFAULT             -89 //    OFF, n. Where n=-90..90 (degrees.) Default Dec park position.                 Option

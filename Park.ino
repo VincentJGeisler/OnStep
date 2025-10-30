@@ -64,11 +64,23 @@ CommandErrors park() {
   int lastParkStatus=parkStatus; 
   parkStatus=Parking; nv.write(EE_parkStatus,parkStatus);
   
-  // get suggested park position
-  double parkTargetAxis1=nv.readFloat(EE_posAxis1);
-  double parkTargetAxis2=nv.readFloat(EE_posAxis2);
-  int parkPierSide=nv.read(EE_pierSide);
+  // Determine park target
+  double parkTargetAxis1;
+  double parkTargetAxis2;
+  int parkPierSide;
+
+#if (MOUNT_TYPE == FORK) && (PARK_COORD_SYSTEM == INSTRUMENT)
+  // Instrument-space park: HA=0 => RA=LST, Dec near -90
+  parkTargetAxis1 = (LST*15.0) + (double)PARK_AXIS1_OFFSET_DEG; // convert hours to degrees
+  parkTargetAxis2 = (double)DEC_PARK_DEFAULT + (double)PARK_AXIS2_OFFSET_DEG;
+  parkPierSide = PierSideNone;
+#else
+  // Legacy behavior: use stored instrument coordinates
+  parkTargetAxis1=nv.readFloat(EE_posAxis1);
+  parkTargetAxis2=nv.readFloat(EE_posAxis2);
+  parkPierSide=nv.read(EE_pierSide);
   if (parkPierSide != PierSideNone && parkPierSide != PierSideEast && parkPierSide != PierSideWest) { parkPierSide=PierSideNone; DLF("ERR, park(): bad NV parkPierSide"); }
+#endif
 
   // now, goto this target coordinate
   e=goTo(parkTargetAxis1,parkTargetAxis2,parkTargetAxis1,parkTargetAxis2,parkPierSide);
